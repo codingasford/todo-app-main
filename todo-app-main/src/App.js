@@ -1,6 +1,6 @@
 import "./App.css";
 import "./styles.css";
-import ToDoBox from "./ToDoBox";
+import ToDos from "./ToDos.js";
 
 function App() {
   return (
@@ -21,12 +21,7 @@ function App() {
           />
         </header>
         <main>
-          <ToDoBox isCreateBox={true} />
-          <ToDoBox isCreateBox={false} />
-          <ToDoBox isCreateBox={false} />
-          <ToDoBox isCreateBox={false} />
-          <ToDoBox isCreateBox={false} />
-          <ToDoBox isCreateBox={false} />
+          <ToDos></ToDos>
         </main>
       </div>
     </div>

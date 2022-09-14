@@ -30,6 +30,7 @@ header {
   width: 35rem;
   display: flex;
   align-items: center;
+  margin-bottom: 2rem;
 }
 
 main {
@@ -55,9 +56,58 @@ main {
   min-height: 3rem;
   max-height: fit-content;
   border-bottom: 1px solid hsl(233, 14%, 35%);
+  display: flex;
+  align-items: center;
+  padding-left: 1rem;
+  gap: 1rem;
 }
 
-#create-box {
+.todo-input {
+  color: white;
+  outline: none;
+  background-color: transparent;
+  border: none;
+  width: 90%;
+}
+
+.check-box {
+  position: relative;
+  height: 1.2rem;
+  width: 1.2rem;
+  border-radius: 2rem;
+  border: 1px solid hsl(233, 14%, 35%);
+}
+
+.check-background {
+  /* hsl(192, 100%, 67%) */
+  /* hsl(280, 87%, 65%); */
+  background-image: linear-gradient(
+    130deg,
+    hsl(192, 100%, 67%),
+    hsl(280, 87%, 65%)
+  );
+}
+
+#check-icon {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  scale: 0.7;
+}
+
+.create-box {
   border: none;
   margin-bottom: 1.5rem;
+}
+
+#create-icon {
+  font-size: 2rem;
+  height: 1rem;
+  margin-bottom: 2rem;
+  margin-right: 0.5rem;
+  cursor: pointer;
 }
