@@ -1,7 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Checkbox from "./Checkbox.js";
 
 function ToDoBox(props) {
+  const [isChecked, setIsChecked] = useState(props.isCheckedOnMount);
+  const [textStylingClass, setTextStylingClass] = useState("");
+  const [boxStyling, setBoxStyling] = useState("dark-mode-box-styling");
+  const isMounted = useRef(false);
+
+  useEffect(() => {
+    console.log("this checkbox is checked?", isChecked);
+
+    if (isChecked) {
+      //add checked text styling
+      setTextStylingClass("checked-text-styling");
+    } else {
+      //remove checked text styling
+      setTextStylingClass("");
+    }
+  }, [isChecked]);
+
+  useEffect(() => {
+    if (props.colorMode === "light") {
+      setBoxStyling("light-mode-box-styling");
+    } else {
+      setBoxStyling("dark-mode-box-styling");
+    }
+  }, [props.colorMode]);
+
   function handleClick() {
     props.addToDoToList();
     props.setState({});
@@ -9,11 +34,13 @@ function ToDoBox(props) {
 
   if (props.isCreateBox) {
     return (
-      <div className="todo-box create-box">
-        {/* <span className="check-box"></span> */}
-        <Checkbox />
+      <div className={`todo-box create-box ${boxStyling}`}>
+        <Checkbox
+          setIsChecked={setIsChecked}
+          isChecked={isChecked}
+        />
         <input
-          className="todo-input"
+          className={`todo-input ${textStylingClass}`}
           placeholder="Create a new todo..."
           onChange={props.getInputData}
         />
@@ -27,9 +54,12 @@ function ToDoBox(props) {
     );
   } else {
     return (
-      <div className="todo-box">
-        <Checkbox />
-        <div>{props.data}</div>
+      <div className={`todo-box ${boxStyling}`}>
+        <Checkbox
+          setIsChecked={setIsChecked}
+          isChecked={isChecked}
+        />
+        <div className={textStylingClass}>{props.data}</div>
       </div>
     );
   }

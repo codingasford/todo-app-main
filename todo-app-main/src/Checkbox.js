@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function Checkbox() {
+function Checkbox(props) {
   const defaultImgSrc = "/images/default.png";
   const checkImgSrc = "/images/icon-check.svg";
   const [imgSrc, setImgSrc] = useState(defaultImgSrc);
@@ -14,10 +14,12 @@ function Checkbox() {
   function CheckBoxOn() {
     setImgSrc(checkImgSrc);
     setCheckBackground("check-background");
+    props.setIsChecked(true);
   }
   function CheckBoxOff() {
     setImgSrc(defaultImgSrc);
     setCheckBackground("");
+    props.setIsChecked(false);
   }
 
   return (

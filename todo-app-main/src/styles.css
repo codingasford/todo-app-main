@@ -4,9 +4,14 @@
   box-sizing: border-box;
 }
 
-body {
-  background-color: hsl(235, 21%, 11%);
+#app-container {
   position: relative;
+  width: 100%;
+  height: 100vh;
+}
+
+.dark-mode-app-background {
+  background-color: hsl(235, 21%, 11%);
 }
 
 #background-top {
@@ -49,21 +54,33 @@ main {
   cursor: pointer;
 }
 
+#todos-container {
+  box-shadow: 0rem 0.5rem 2rem -1rem;
+}
+
 .todo-box {
-  color: white;
-  background-color: hsl(235, 24%, 19%);
+  color: lightgrey;
+  border-bottom: 1px solid hsl(233, 14%, 35%);
   width: 100%;
   min-height: 3rem;
   max-height: fit-content;
-  border-bottom: 1px solid hsl(233, 14%, 35%);
   display: flex;
   align-items: center;
   padding-left: 1rem;
   gap: 1rem;
 }
 
+.dark-mode-box-styling {
+  background-color: hsl(235, 24%, 19%);
+}
+
+.light-mode-box-styling {
+  background-color: white;
+  color: black;
+}
+
 .todo-input {
-  color: white;
+  color: lightgrey;
   outline: none;
   background-color: transparent;
   border: none;
@@ -78,9 +95,12 @@ main {
   border: 1px solid hsl(233, 14%, 35%);
 }
 
+.checked-text-styling {
+  color: grey;
+  text-decoration: line-through;
+}
+
 .check-background {
-  /* hsl(192, 100%, 67%) */
-  /* hsl(280, 87%, 65%); */
   background-image: linear-gradient(
     130deg,
     hsl(192, 100%, 67%),
