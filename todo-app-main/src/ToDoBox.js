@@ -33,6 +33,13 @@ function ToDoBox(props) {
   }
 
   if (props.isCreateBox) {
+    //decide if todo should be checked after it is added, according to if checked in create box
+    if (isChecked) {
+      props.setIsCheckedOnMount(true);
+    } else {
+      props.setIsCheckedOnMount(false);
+    }
+
     return (
       <div className={`todo-box create-box ${boxStyling}`}>
         <Checkbox
@@ -57,7 +64,7 @@ function ToDoBox(props) {
       <div className={`todo-box ${boxStyling}`}>
         <Checkbox
           setIsChecked={setIsChecked}
-          isChecked={isChecked}
+          isCheckedOnMount={props.isCheckedOnMount}
         />
         <div className={textStylingClass}>{props.data}</div>
       </div>

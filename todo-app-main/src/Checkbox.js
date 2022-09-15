@@ -1,10 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 function Checkbox(props) {
   const defaultImgSrc = "/images/default.png";
   const checkImgSrc = "/images/icon-check.svg";
   const [imgSrc, setImgSrc] = useState(defaultImgSrc);
   const [checkBackground, setCheckBackground] = useState("");
+
+  //determine default imgSrc
+  useEffect(() => {
+    if (props.isCheckedOnMount) {
+      setImgSrc(checkImgSrc);
+      setCheckBackground("check-background");
+    } else {
+      setImgSrc(defaultImgSrc);
+      setCheckBackground("");
+    }
+  }, []);
 
   function HandleClick() {
     // Toggle checkbox image on off

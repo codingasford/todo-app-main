@@ -131,3 +131,22 @@ main {
   margin-right: 0.5rem;
   cursor: pointer;
 }
+
+footer {
+  display: flex;
+  width: 35rem;
+}
+
+footer div {
+  padding: 0 0.25rem;
+}
+
+footer :first-child {
+  margin-right: auto;
+  padding-left: 0.5rem;
+}
+
+footer :last-child {
+  margin-left: auto;
+  padding-right: 0.5rem;
+}

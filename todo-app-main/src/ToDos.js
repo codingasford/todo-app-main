@@ -26,6 +26,7 @@ function ToDos(props) {
         addToDoToList={addToDoToList}
         setState={setState}
         colorMode={props.colorMode}
+        setIsCheckedOnMount={setIsCheckedOnMount}
       />
       <div id="todos-container">
         {dataArr.map((inputData, index) => {

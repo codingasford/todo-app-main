@@ -61,6 +61,13 @@ function App() {
         <main>
           <ToDos colorMode={colorMode}></ToDos>
         </main>
+        <footer>
+          <div>0 items left</div>
+          <div>All</div>
+          <div>Active</div>
+          <div>Completed</div>
+          <div>Clear Completed</div>
+        </footer>
       </div>
     </div>
   );
