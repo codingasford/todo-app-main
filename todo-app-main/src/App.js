@@ -4,13 +4,14 @@ import ToDos from "./ToDos.js";
 import React, { useState, useEffect, useRef } from "react";
 
 function App() {
+  const isMounted = useRef(false);
   const [colorMode, setColorMode] = useState("dark");
   const [bgSrc, setBgSrc] = useState("/images/bg-desktop-dark.jpg");
   const [colorModeIconSrc, setColorModeIconSrc] = useState(
     "/images/icon-sun.svg"
   );
   const [appBgClass, setAppBgClass] = useState("dark-mode-app-background");
-  const isMounted = useRef(false);
+  const [boxStyling, setBoxStyling] = useState("dark-mode-box-styling");
 
   function toggleColorMode() {
     if (colorMode === "dark") {
@@ -19,6 +20,14 @@ function App() {
       setColorMode("dark");
     }
   }
+
+  useEffect(() => {
+    if (colorMode === "light") {
+      setBoxStyling("light-mode-box-styling");
+    } else {
+      setBoxStyling("dark-mode-box-styling");
+    }
+  }, [colorMode]);
 
   useEffect(() => {
     if (isMounted.current) {
@@ -59,9 +68,12 @@ function App() {
           />
         </header>
         <main>
-          <ToDos colorMode={colorMode}></ToDos>
+          <ToDos
+            colorMode={colorMode}
+            boxStyling={boxStyling}
+          ></ToDos>
         </main>
-        <footer>
+        <footer className={boxStyling}>
           <div>0 items left</div>
           <div>All</div>
           <div>Active</div>

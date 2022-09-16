@@ -1,15 +1,25 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Checkbox from "./Checkbox.js";
 
 function ToDoBox(props) {
   const [isChecked, setIsChecked] = useState(props.isCheckedOnMount);
   const [textStylingClass, setTextStylingClass] = useState("");
-  const [boxStyling, setBoxStyling] = useState("dark-mode-box-styling");
-  const isMounted = useRef(false);
+
+  //got error that todos and todobox cannot update component while
+  //rendering another component pointing to this code (props.setIsCheckedOnMount)
+  //this blank useEffect with no second param makes sure it calls after a render to avoid this
 
   useEffect(() => {
-    console.log("this checkbox is checked?", isChecked);
+    if (props.isCreateBox) {
+      if (isChecked) {
+        props.setIsCheckedOnMount(true);
+      } else {
+        props.setIsCheckedOnMount(false);
+      }
+    }
+  });
 
+  useEffect(() => {
     if (isChecked) {
       //add checked text styling
       setTextStylingClass("checked-text-styling");
@@ -19,29 +29,31 @@ function ToDoBox(props) {
     }
   }, [isChecked]);
 
-  useEffect(() => {
-    if (props.colorMode === "light") {
-      setBoxStyling("light-mode-box-styling");
-    } else {
-      setBoxStyling("dark-mode-box-styling");
+  function handleKeyPressed(event) {
+    if (event.key == "Enter") {
+      handleClickCreateButton();
     }
-  }, [props.colorMode]);
+  }
 
-  function handleClick() {
+  function handleClickCreateButton() {
     props.addToDoToList();
     props.setState({});
   }
 
-  if (props.isCreateBox) {
-    //decide if todo should be checked after it is added, according to if checked in create box
-    if (isChecked) {
-      props.setIsCheckedOnMount(true);
-    } else {
-      props.setIsCheckedOnMount(false);
-    }
+  function handleClickDeleteButton() {
+    //if splice from dataArr that renders a component todobox for each piece of data
+    //if remove data from dataArr, component removed...
+    let updatedArr = props.dataArr;
+    updatedArr.splice(props.index, 1);
+    props.setDataArr(updatedArr);
 
+    //then need to rerender todos... I have "decoy state" to help with that
+    props.setState({});
+  }
+
+  if (props.isCreateBox) {
     return (
-      <div className={`todo-box create-box ${boxStyling}`}>
+      <div className={`todo-box create-box ${props.boxStyling}`}>
         <Checkbox
           setIsChecked={setIsChecked}
           isChecked={isChecked}
@@ -50,10 +62,12 @@ function ToDoBox(props) {
           className={`todo-input ${textStylingClass}`}
           placeholder="Create a new todo..."
           onChange={props.getInputData}
+          tabIndex={-1} //-1 index makes it not tabable/interactive
+          onKeyDown={handleKeyPressed}
         />
         <span
           id="create-icon"
-          onClick={handleClick}
+          onClick={handleClickCreateButton}
         >
           +
         </span>
@@ -61,12 +75,17 @@ function ToDoBox(props) {
     );
   } else {
     return (
-      <div className={`todo-box ${boxStyling}`}>
+      <div className={`todo-box ${props.boxStyling}`}>
         <Checkbox
           setIsChecked={setIsChecked}
           isCheckedOnMount={props.isCheckedOnMount}
         />
-        <div className={textStylingClass}>{props.data}</div>
+        <div className={`todo-box-text ${textStylingClass}`}>{props.data}</div>
+        <img
+          className="cross-icon"
+          src="/images/icon-cross.svg"
+          onClick={handleClickDeleteButton}
+        ></img>
       </div>
     );
   }

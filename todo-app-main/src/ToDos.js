@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ToDoBox from "./ToDoBox.js";
 
 function ToDos(props) {
@@ -15,7 +15,6 @@ function ToDos(props) {
     let updatedArr = dataArr;
     updatedArr.push(dataInput);
     setDataArr(updatedArr);
-    console.log(dataArr);
   }
 
   return (
@@ -27,6 +26,7 @@ function ToDos(props) {
         setState={setState}
         colorMode={props.colorMode}
         setIsCheckedOnMount={setIsCheckedOnMount}
+        boxStyling={props.boxStyling}
       />
       <div id="todos-container">
         {dataArr.map((inputData, index) => {
@@ -34,9 +34,14 @@ function ToDos(props) {
             <ToDoBox
               isCreateBox={false}
               key={index}
+              index={index}
               data={inputData}
+              dataArr={dataArr}
+              setDataArr={setDataArr}
+              setState={setState}
               colorMode={props.colorMode}
               isCheckedOnMount={isCheckedOnMount}
+              boxStyling={props.boxStyling}
             ></ToDoBox>
           );
         })}

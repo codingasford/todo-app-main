@@ -4,6 +4,11 @@
   box-sizing: border-box;
 }
 
+:root {
+  --mode-color: hsl(235, 24%, 19%);
+  --cross-icon-visibility: hidden;
+}
+
 #app-container {
   position: relative;
   width: 100%;
@@ -59,7 +64,6 @@ main {
 }
 
 .todo-box {
-  color: lightgrey;
   border-bottom: 1px solid hsl(233, 14%, 35%);
   width: 100%;
   min-height: 3rem;
@@ -70,12 +74,24 @@ main {
   gap: 1rem;
 }
 
+.todo-box:hover {
+  /* changes the visibility property of .cross-icon*/
+  --cross-icon-visibility: visible;
+}
+
+.todo-box-text {
+  cursor: pointer;
+}
+
 .dark-mode-box-styling {
+  color: lightgrey;
   background-color: hsl(235, 24%, 19%);
+  --mode-color: hsl(235, 24%, 19%);
 }
 
 .light-mode-box-styling {
   background-color: white;
+  --mode-color: white;
   color: black;
 }
 
@@ -92,12 +108,30 @@ main {
   height: 1.2rem;
   width: 1.2rem;
   border-radius: 2rem;
-  border: 1px solid hsl(233, 14%, 35%);
+  border: 0.1rem solid hsl(233, 14%, 35%);
 }
 
-.checked-text-styling {
-  color: grey;
-  text-decoration: line-through;
+.check-box:hover {
+  height: 1.2rem;
+  width: 1.2rem;
+  border-radius: 1rem;
+  border: 0.1rem solid transparent;
+  background-image: linear-gradient(var(--mode-color), var(--mode-color)),
+    linear-gradient(130deg, hsl(192, 100%, 67%), hsl(280, 87%, 65%));
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+}
+.check-box.check-background:hover {
+  height: 1.2rem;
+  width: 1.2rem;
+  border: 0.1rem solid hsl(233, 14%, 35%);
+  background-image: linear-gradient(
+    130deg,
+    hsl(192, 100%, 67%),
+    hsl(280, 87%, 65%)
+  );
+  background-origin: border-box;
+  background-clip: content-box, border-box;
 }
 
 .check-background {
@@ -117,6 +151,12 @@ main {
   right: 0;
   margin: auto;
   scale: 0.7;
+  cursor: pointer;
+}
+
+.checked-text-styling {
+  color: grey;
+  text-decoration: line-through;
 }
 
 .create-box {
@@ -130,6 +170,15 @@ main {
   margin-bottom: 2rem;
   margin-right: 0.5rem;
   cursor: pointer;
+}
+
+.cross-icon {
+  margin-left: auto;
+  height: 0.8rem;
+  margin-right: 0.75rem;
+  cursor: pointer;
+  /* .todo-box on hover changes this visibility*/
+  visibility: var(--cross-icon-visibility);
 }
 
 footer {
