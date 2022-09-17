@@ -42,6 +42,8 @@ function ToDos(props) {
               colorMode={props.colorMode}
               isCheckedOnMount={isCheckedOnMount}
               boxStyling={props.boxStyling}
+              itemsLeftCount={props.itemsLeftCount}
+              setItemsLeftCount={props.setItemsLeftCount}
             ></ToDoBox>
           );
         })}

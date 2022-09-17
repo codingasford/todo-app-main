@@ -1,15 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Checkbox from "./Checkbox.js";
 
 function ToDoBox(props) {
   const [isChecked, setIsChecked] = useState(props.isCheckedOnMount);
   const [textStylingClass, setTextStylingClass] = useState("");
+  const prevItemsLeftCountRef = useRef();
 
   //got error that todos and todobox cannot update component while
   //rendering another component pointing to this code (props.setIsCheckedOnMount)
   //this blank useEffect with no second param makes sure it calls after a render to avoid this
 
   useEffect(() => {
+    //AFTER A RENDER
+
     if (props.isCreateBox) {
       if (isChecked) {
         props.setIsCheckedOnMount(true);
@@ -18,6 +21,27 @@ function ToDoBox(props) {
       }
     }
   });
+
+  useEffect(() => {
+    prevItemsLeftCountRef.current = props.itemsLeftCount;
+  }, [props.itemsLeftCount]);
+
+  useEffect(() => {
+    //RUNS ON MOUNT
+    //only apply this logic to todobox and not createbox
+    if (!props.isCreateBox) {
+      console.log("mount");
+      props.setItemsLeftCount(prevItemsLeftCountRef.current + 1);
+    }
+
+    //return function will run on unMount
+
+    return function removeToDoFromItemsLeft() {
+      //this needs to onyl run after setitemsleftcount state is for sure done updating
+      console.log("unmount");
+      props.setItemsLeftCount(prevItemsLeftCountRef.current - 1);
+    };
+  }, []);
 
   useEffect(() => {
     if (isChecked) {

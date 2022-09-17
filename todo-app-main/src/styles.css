@@ -6,6 +6,7 @@
 
 :root {
   --mode-color: hsl(235, 24%, 19%);
+  --mode-text-color: lightgrey;
   --cross-icon-visibility: hidden;
 }
 
@@ -84,19 +85,21 @@ main {
 }
 
 .dark-mode-box-styling {
-  color: lightgrey;
+  --mode-text-color: lightgrey;
+  color: var(--mode-text-color);
   background-color: hsl(235, 24%, 19%);
   --mode-color: hsl(235, 24%, 19%);
 }
 
 .light-mode-box-styling {
+  --mode-text-color: black;
+  color: var(--mode-text-color);
   background-color: white;
   --mode-color: white;
-  color: black;
 }
 
 .todo-input {
-  color: lightgrey;
+  color: var(--mode-text-color);
   outline: none;
   background-color: transparent;
   border: none;

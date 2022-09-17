@@ -12,6 +12,7 @@ function App() {
   );
   const [appBgClass, setAppBgClass] = useState("dark-mode-app-background");
   const [boxStyling, setBoxStyling] = useState("dark-mode-box-styling");
+  const [itemsLeftCount, setItemsLeftCount] = useState(0);
 
   function toggleColorMode() {
     if (colorMode === "dark") {
@@ -71,10 +72,12 @@ function App() {
           <ToDos
             colorMode={colorMode}
             boxStyling={boxStyling}
+            itemsLeftCount={itemsLeftCount}
+            setItemsLeftCount={setItemsLeftCount}
           ></ToDos>
         </main>
         <footer className={boxStyling}>
-          <div>0 items left</div>
+          <div>{itemsLeftCount} items left</div>
           <div>All</div>
           <div>Active</div>
           <div>Completed</div>
