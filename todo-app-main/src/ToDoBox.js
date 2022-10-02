@@ -1,14 +1,20 @@
 import React, { useState, useEffect, useRef } from "react";
 import Checkbox from "./Checkbox.js";
+import { nanoid } from "nanoid";
 
 function ToDoBox(props) {
   const [isChecked, setIsChecked] = useState(props.isCheckedOnMount);
   const [textStylingClass, setTextStylingClass] = useState("");
-  const prevItemsLeftCountRef = useRef();
-
+  const [toDoInfo, setToDoInfo] = useState({});
+  const initialRender = useRef(true);
+  const hasClickedCheckbox = useRef(false);
   //got error that todos and todobox cannot update component while
   //rendering another component pointing to this code (props.setIsCheckedOnMount)
   //this blank useEffect with no second param makes sure it calls after a render to avoid this
+
+  function setHasClickedCheckbox() {
+    hasClickedCheckbox.current = true;
+  }
 
   useEffect(() => {
     //AFTER A RENDER
@@ -23,56 +29,91 @@ function ToDoBox(props) {
   });
 
   useEffect(() => {
-    prevItemsLeftCountRef.current = props.itemsLeftCount;
-  }, [props.itemsLeftCount]);
+    //MOUNT
 
-  useEffect(() => {
-    //RUNS ON MOUNT
-    //only apply this logic to todobox and not createbox
     if (!props.isCreateBox) {
-      console.log("mount");
-      props.setItemsLeftCount(prevItemsLeftCountRef.current + 1);
+      //on mount we can store data for this todo since on mount itll be the last index of dataArr..
+
+      setToDoInfo({
+        id: props.dataArr[props.dataArr.length - 1].id,
+        value: props.dataArr[props.dataArr.length - 1].todo,
+      });
+
+      //increment items left count
+      props.setItemsLeftCount((count) => count + 1);
+
+      return function removeToDoFromItemsLeft() {
+        // have to check if not create box here too or else will double decrement
+        props.setItemsLeftCount((count) => count - 1);
+      };
     }
-
-    //return function will run on unMount
-
-    return function removeToDoFromItemsLeft() {
-      //this needs to onyl run after setitemsleftcount state is for sure done updating
-      console.log("unmount");
-      props.setItemsLeftCount(prevItemsLeftCountRef.current - 1);
-    };
   }, []);
 
   useEffect(() => {
-    if (isChecked) {
-      //add checked text styling
-      setTextStylingClass("checked-text-styling");
+    // ALL callbacks (like useEffect) run when component mounts no matter dependency array
+    if (initialRender.current) {
+      initialRender.current = false;
     } else {
-      //remove checked text styling
-      setTextStylingClass("");
+      if (!props.isCreateBox) {
+        //we can avoid this by checking if state is equal to the initial value (i set it as string "init")
+        // if (toDoInfo !== null) console.log(toDoInfo);
+
+        //check if todo was set to completed on creation, and add to compeletedToDosArr
+        if (isChecked) {
+          props.setCompletedToDosArr((completedToDos) =>
+            completedToDos.concat({ id: toDoInfo.id, todo: toDoInfo.value })
+          );
+        }
+      }
+    }
+  }, [toDoInfo]);
+
+  useEffect(() => {
+    //its ok that it calls a bunch of times for each render, it makes sense cuz each box has this component
+    //so yeah it will call a bunch of times but this is just for me to see the contents of ARR
+    if (initialRender.current) {
+      initialRender.current = false;
+    } else {
+      if (!props.isCreateBox) {
+        console.log(props.completedToDosArr);
+      }
+    }
+  }, [props.completedToDosArr]);
+
+  useEffect(() => {
+    if (initialRender.current) {
+      initialRender.current = false;
+    } else {
+      if (isChecked) {
+        //add checked class
+        setTextStylingClass("checked");
+        //add item to c ompletedTodosArr
+        // if (!props.isCreateBox) {
+        //   props.setCompletedToDosArr((completedToDos) =>
+        //     completedToDos.concat({ id: toDoInfo.id, todo: toDoInfo.value })
+        //   );
+        // }
+      } else {
+        //remove checked class
+        setTextStylingClass("");
+        //remove item from completedTodosArr
+        // if (hasClickedCheckbox.current) {
+        //   if (!props.isCreateBox) {
+        //     props.setCompletedToDosArr((completedToDos) => {
+        //       completedToDos.filter(
+        //         (completedToDo) => completedToDo.id !== toDoInfo.id
+        //       );
+        //     });
+        //   }
+        // }
+      }
     }
   }, [isChecked]);
 
   function handleKeyPressed(event) {
     if (event.key == "Enter") {
-      handleClickCreateButton();
+      props.addTodo();
     }
-  }
-
-  function handleClickCreateButton() {
-    props.addToDoToList();
-    props.setState({});
-  }
-
-  function handleClickDeleteButton() {
-    //if splice from dataArr that renders a component todobox for each piece of data
-    //if remove data from dataArr, component removed...
-    let updatedArr = props.dataArr;
-    updatedArr.splice(props.index, 1);
-    props.setDataArr(updatedArr);
-
-    //then need to rerender todos... I have "decoy state" to help with that
-    props.setState({});
   }
 
   if (props.isCreateBox) {
@@ -91,7 +132,7 @@ function ToDoBox(props) {
         />
         <span
           id="create-icon"
-          onClick={handleClickCreateButton}
+          onClick={props.addToDo}
         >
           +
         </span>
@@ -103,12 +144,15 @@ function ToDoBox(props) {
         <Checkbox
           setIsChecked={setIsChecked}
           isCheckedOnMount={props.isCheckedOnMount}
+          setHasClickedCheckbox={setHasClickedCheckbox}
         />
-        <div className={`todo-box-text ${textStylingClass}`}>{props.data}</div>
+        <div className={`todo-box-text ${textStylingClass}`}>
+          {props.data.todo}
+        </div>
         <img
           className="cross-icon"
           src="/images/icon-cross.svg"
-          onClick={handleClickDeleteButton}
+          onClick={() => props.removeToDo(props.data.id)}
         ></img>
       </div>
     );

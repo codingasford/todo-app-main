@@ -20,6 +20,7 @@ function Checkbox(props) {
   function HandleClick() {
     // Toggle checkbox image on off
     imgSrc === defaultImgSrc ? CheckBoxOn() : CheckBoxOff();
+    // props.setHasClickedCheckbox();
   }
 
   function CheckBoxOn() {
